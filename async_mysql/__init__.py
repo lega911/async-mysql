@@ -38,7 +38,7 @@ class AsyncMysql():
         self._threads = []
         self._working = True
         self._tasks = Queue.Queue()
-        self.ioloop = ioloop or tornado.ioloop.IOLoop.instance()
+        self.ioloop = ioloop
         # connection dict
         self._connection = cn = {}
         cn['host'] = host
@@ -67,7 +67,8 @@ class AsyncMysql():
         return gen.Task(self.query, query, argv)
     def send_result(self, task, result, error):
         callback = partial(task[3], (result, error))
-        self.ioloop.add_callback(callback)
+        ioloop = self.ioloop or tornado.ioloop.IOLoop.instance()
+        ioloop.add_callback(callback)
 
 class Worker(threading.Thread):
     def __init__(self, cnt):
