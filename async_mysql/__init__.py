@@ -79,13 +79,16 @@ class Worker(threading.Thread):
     def get_cursor(self):
         # need reconnect?
         cnt = self._controller
-        t = time.time()
-        if t > self._time_for_reconnect:
-            self._time_for_reconnect = time.time() + cnt.max_idle_time
-            if self._db:
-                self._db.close()
+        if cnt.max_idle_time:
+            t = time.time()
+            if t > self._time_for_reconnect:
+                self._time_for_reconnect = time.time() + cnt.max_idle_time
+                if self._db:
+                    self._db.close()
+            elif self._db:
+                return self._db.cursor()
         elif self._db:
-            return self._db.cursor()
+            self._db.close()
         self._db = MySQLdb.connect(use_unicode=True, charset='utf8', **self._controller._connection)
         self._db.autocommit(True)
         return self._db.cursor()
