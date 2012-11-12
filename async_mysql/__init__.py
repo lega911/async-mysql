@@ -87,7 +87,7 @@ class Worker(threading.Thread):
                     self._db.close()
             elif self._db:
                 return self._db.cursor()
-        elif self._db:
+        elif self._db and self._db.open:
             self._db.close()
         self._db = MySQLdb.connect(use_unicode=True, charset='utf8', **self._controller._connection)
         self._db.autocommit(True)
