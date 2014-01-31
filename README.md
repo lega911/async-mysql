@@ -1,7 +1,10 @@
 async-mysql
 ===========
 
-async connector to mysql and sphinx-search for tornado, it uses thread pool.
+Copyright (c) 2013 Oleg Nechaev <lega911@gmail.com>
+License: MIT
+
+Async connector to mysql and sphinx-search for tornado, it uses thread pool.
 
 Example:
 ===========
